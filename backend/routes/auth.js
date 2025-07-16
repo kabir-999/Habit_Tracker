@@ -2,6 +2,7 @@ const express = require('express');
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 const Auth = require('../models/Auth');
+const User = require('../models/User');
 const router = express.Router();
 
 // Signup
@@ -13,6 +14,8 @@ router.post('/signup', async (req, res) => {
     if (existing) return res.status(400).json({ msg: 'Email already exists' });
     const hash = await bcrypt.hash(password, 10);
     const user = await Auth.create({ email, password: hash });
+    // Also create a User document for gamification/XP
+    await User.create({ _id: user._id, email });
     const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET, { expiresIn: '7d' });
     res.json({ token, userId: user._id });
   } catch (err) {

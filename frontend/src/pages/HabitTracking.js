@@ -160,16 +160,36 @@ const HabitTracking = () => {
               </div>
             </div>
             <div style={{ color: '#22C55E', fontWeight: 600, marginBottom: 8 }}>Start: {habit.startDate ? new Date(habit.startDate).toLocaleDateString() : ''}</div>
-            <Calendar
-              value={null}
-              tileContent={({ date }) => {
-                const dayKey = date.toISOString().slice(0, 10);
-                const emoji = emojiLogs[habit._id]?.[dayKey]?.emoji;
-                return emoji ? <span style={{ fontSize: 22 }}>{emoji}</span> : null;
-              }}
-              onClickDay={date => !habit.completed && handleEmojiDay(habit._id, date)}
-              className={styles.calendar}
-            />
+            <div style={{ position: 'relative' }}>
+              <Calendar
+                value={null}
+                tileContent={({ date }) => {
+                  const dayKey = date.toISOString().slice(0, 10);
+                  const emoji = emojiLogs[habit._id]?.[dayKey]?.emoji;
+                  return emoji ? <span style={{ fontSize: 22 }}>{emoji}</span> : null;
+                }}
+                onClickDay={date => !habit.completed && handleEmojiDay(habit._id, date)}
+                className={styles.calendar}
+              />
+              {habit.completed && (
+                <div style={{
+                  position: 'absolute',
+                  top: 0,
+                  left: 0,
+                  right: 0,
+                  bottom: 0,
+                  background: 'rgba(46, 204, 113, 0.7)',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  pointerEvents: 'none',
+                  zIndex: 2,
+                  animation: 'fadeIn 0.5s',
+                }}>
+                  <span className="calendarCompletedText">COMPLETED</span>
+                </div>
+              )}
+            </div>
             <span style={{ fontSize: 12, color: '#6b7280', marginTop: 4, display: 'block' }}>Click a date to mark with an emoji</span>
           </div>
         ))}

@@ -2,7 +2,6 @@ import React from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import styles from './Home.module.css';
 import Footer from '../components/Footer';
-
 const features = [
   {
     icon: '📈',
@@ -39,6 +38,7 @@ const Home = ({ isLoggedIn }) => {
   return (
     <div className={styles.homeContainer}>
       <section className={styles.hero}>
+        {/* Hero content only, no image here */}
         <h1 className={styles.title}>HabitWise</h1>
         <p className={styles.tagline}>Build better habits. Achieve your goals. Transform your life.</p>
         {!isLoggedIn && (
@@ -47,21 +47,66 @@ const Home = ({ isLoggedIn }) => {
           </div>
         )}
       </section>
+      {/* Right-aligned image, outside hero */}
       <section className={styles.featuresSection}>
         <h2 className={styles.featuresHeader}>Features</h2>
-        <div className={styles.featuresGrid}>
-          {features.map((feature, idx) => (
+        <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'flex-start', gap: 32, width: '100%', maxWidth: 1100, margin: '0 auto' }}>
+          {/* First Column */}
+          <div style={{ display: 'flex', flexDirection: 'column', gap: 32, flex: 1 }}>
+            {/* Habit Tracking */}
             <div
               className={styles.featureCard}
-              key={idx}
-              onClick={() => navigate(featureRoutes[idx])}
+              onClick={() => navigate(featureRoutes[0])}
               style={{ cursor: 'pointer' }}
             >
-              <div className={styles.icon}>{feature.icon}</div>
-              <h3 className={styles.featureTitle}>{feature.title}</h3>
-              <p className={styles.featureDesc}>{feature.description}</p>
+              <div className={styles.icon}>
+                <img src={process.env.PUBLIC_URL + '/HTF.png'} alt="Habit Tracker" style={{ width: 44, height: 44, objectFit: 'contain', borderRadius: 12 }} />
+              </div>
+              <h3 className={styles.featureTitle}>{features[0].title}</h3>
+              <p className={styles.featureDesc}>{features[0].description}</p>
             </div>
-          ))}
+            {/* AI Suggestions */}
+            <div
+              className={styles.featureCard}
+              onClick={() => navigate(featureRoutes[2])}
+              style={{ cursor: 'pointer' }}
+            >
+              <div className={styles.icon}>{features[2].icon}</div>
+              <h3 className={styles.featureTitle}>{features[2].title}</h3>
+              <p className={styles.featureDesc}>{features[2].description}</p>
+            </div>
+          </div>
+          {/* Center Column (Image) */}
+          <div className={styles.centerImageWrapper} style={{ flex: 1, display: 'flex', justifyContent: 'center', alignItems: 'center', marginTop: 200,width: '200%' }}>
+            <img
+              src={process.env.PUBLIC_URL + '/H_T_HP.webp'}
+              alt="HabitWise Center"
+              className={styles.centerImage}
+            />
+          </div>
+          {/* Last Column */}
+          <div style={{ display: 'flex', flexDirection: 'column', gap: 32, flex: 1 }}>
+            {/* Streaks & Rewards */}
+            <div
+              className={styles.featureCard}
+              onClick={() => navigate(featureRoutes[1])}
+              style={{ cursor: 'pointer' }}
+            >
+              <div className={styles.icon}>{features[1].icon}</div>
+              <h3 className={styles.featureTitle}>{features[1].title}</h3>
+              <p className={styles.featureDesc}>{features[1].description}</p>
+            </div>
+            {/* Analytics & Progress */}
+            <div
+              className={styles.featureCard}
+              onClick={() => navigate(featureRoutes[3])}
+              style={{ cursor: 'pointer' }}
+            >
+              <div className={styles.icon}>{features[3].icon}</div>
+              <h3 className={styles.featureTitle}>{features[3].title}</h3>
+              <p className={styles.featureDesc}>{features[3].description}</p>
+            </div>
+          </div>
         </div>
       </section>
       {/* Modern CTA Section */}

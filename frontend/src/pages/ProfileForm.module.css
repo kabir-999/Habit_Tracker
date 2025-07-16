@@ -1,10 +1,10 @@
 .bg {
   min-height: 100vh;
-  background: #F9FAFB;
+  background: #E9E9E9;
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: flex-start;
+  justify-content: center; /* Center vertically */
   width: 100vw;
   box-sizing: border-box;
 }
@@ -18,19 +18,19 @@
   gap: 48px 48px; /* row gap and column gap */
 }
 .card {
-  background: #fff;
+  background: #E9E9E9;
   border-radius: 1.5rem;
-  box-shadow: 0 4px 32px #60A5FA22;
+  box-shadow: 0 4px 32px #5A706C;
   padding: 2.5rem 2rem 2rem 2rem;
-  max-width: 500px;
+  max-width: 420px;
   width: 100%;
   display: flex;
   flex-direction: column;
   gap: 1.5rem;
   align-items: stretch;
-  margin-bottom: 0; /* Let the grid gap handle spacing */
+  margin: 0 auto; /* Center horizontally */
   transition: box-shadow 0.2s;
-  border: 1.5px solid #F1F5F9;
+  border: 1.5px solid #5A706C;
 }
 .card:not(:last-child) {
   margin-bottom: 0;
@@ -47,7 +47,7 @@
   }
 }
 .title {
-  color: #4ADE80;
+  color: #0F2C25;
   font-size: 2rem;
   font-weight: 900;
   text-align: center;
@@ -56,6 +56,8 @@
 }
 .input {
   width: 100%;
+  max-width: 100%;
+  box-sizing: border-box;
   padding: 0.8rem 1.2rem;
   border-radius: 1rem;
   border: 1.5px solid #e5e7eb;
@@ -65,15 +67,16 @@
   outline: none;
   transition: border 0.2s, box-shadow 0.2s;
   box-shadow: 0 2px 8px #4ade8011;
+  overflow: hidden;
 }
 .input:focus {
-  border: 1.5px solid #4ADE80;
-  box-shadow: 0 2px 8px #4ade8033;
+  border: 1.5px solid #5A706C;
+  box-shadow: 0 2px 8px #5A706C;
 }
 .btn {
   width: 100%;
-  background: linear-gradient(90deg, #4ADE80 0%, #60A5FA 100%);
-  color: #fff;
+  background: #D23939;
+  color: #E9E9E9;
   font-weight: 800;
   font-size: 1.2rem;
   border: none;
@@ -83,11 +86,11 @@
   margin-bottom: 0.2rem;
   cursor: pointer;
   transition: background 0.2s, box-shadow 0.2s;
-  box-shadow: 0 2px 8px #4ade8033;
+  box-shadow: 0 2px 8px #5A706C;
 }
 .btn:hover {
-  background: linear-gradient(90deg, #60A5FA 0%, #4ADE80 100%);
-  box-shadow: 0 4px 16px #60a5fa22;
+  background: #A6AB9F;
+  color: #0F2C25;
 }
 .error {
   color: #f87171;
@@ -147,8 +150,8 @@
 .dashboardTitle {
   font-size: 2.2rem;
   font-weight: 900;
-  color: #4ADE80;
-  background: #e6faef;
+  color: #0F2C25;
+  background: #E9E9E9;
   border-radius: 2rem;
   display: inline-flex;
   align-items: center;
@@ -177,7 +180,7 @@
   max-width: 240px;
   border-radius: 1.2rem;
   padding: 1.2rem 1.5rem;
-  color: #fff;
+  color: #282c34;
   font-weight: 700;
   font-size: 1.1rem;
   display: flex;
@@ -192,10 +195,13 @@
   font-weight: 900;
   margin: 0.2rem 0 0.5rem 0;
 }
-.green { background: linear-gradient(90deg, #4ADE80 60%, #a7f3d0 100%); color: #1e293b; }
-.orange { background: linear-gradient(90deg, #fb923c 60%, #fdba74 100%); color: #fff; }
-.blue { background: linear-gradient(90deg, #60a5fa 60%, #bae6fd 100%); color: #fff; }
-.purple { background: linear-gradient(90deg, #a78bfa 60%, #c4b5fd 100%); color: #fff; }
+.green, .orange, .blue, .purple, .statCard {
+  background: #0F2C25 !important;
+  color: #E9E9E9 !important;
+}
+.dashboardSubtitle, .featureDesc, .input::placeholder, .error {
+  color: #A6AB9F !important;
+}
 
 .dashboardGrid {
   display: grid;
@@ -433,5 +439,16 @@
     min-width: 90vw;
     max-width: 98vw;
     padding: 1.2rem 1rem 1rem 1rem;
+  }
+} 
+
+@media (max-width: 600px) {
+  .card {
+    max-width: 98vw;
+    padding: 1.2rem 0.5rem 1rem 0.5rem;
+  }
+  .input {
+    font-size: 1rem;
+    padding: 0.7rem 0.7rem;
   }
 } 

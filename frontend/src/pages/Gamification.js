@@ -24,8 +24,8 @@ const Gamification = () => {
     }
   };
 
-  if (loading) return <div className={styles.bg}><div className={styles.card}>Loading...</div></div>;
-  if (error) return <div className={styles.bg}><div className={styles.card}>{error}</div></div>;
+  if (loading) return <div style={{ minHeight: '100vh', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#A6AB9F' }}>Loading...</div>;
+  if (error) return <div style={{ minHeight: '100vh', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#D23939', fontWeight: 700 }}>{error}</div>;
   if (!data) return null;
 
   // Helper: fallback for missing data
@@ -74,109 +74,161 @@ const Gamification = () => {
     .map(h => `🔥 ${h.longestStreak}-day streak on ${h.title}`);
 
   return (
-    <div className={styles.bg} style={{ minHeight: '100vh', padding: 0 }}>
-      <div className={styles.card} style={{ maxWidth: 600, margin: '32px auto', boxShadow: '0 4px 24px #22c55e11', borderRadius: 24, padding: 32 }}>
-        {/* 💥 XP Progress Bar */}
-        <div style={{ marginBottom: 32 }}>
-          <div style={{ fontWeight: 700, fontSize: 20, color: '#22C55E', marginBottom: 8 }}>XP Progress</div>
-          <div style={{ textAlign: 'center', marginBottom: 8, fontSize: 16 }}>Level {level}</div>
-          <motion.div style={{ height: 18, borderRadius: 9, background: '#e5e7eb', overflow: 'hidden', margin: '8px 0', boxShadow: '0 2px 8px #60a5fa22' }}>
-            <motion.div
-              initial={{ width: 0 }}
-              animate={{ width: ((xp / (level * 300)) * 100) + '%' }}
-              style={{ height: 18, background: 'linear-gradient(90deg,#22C55E,#60A5FA)', borderRadius: 9 }}
-              transition={{ duration: 0.8 }}
-            />
-          </motion.div>
-          <div style={{ fontSize: 15, color: '#374151', marginTop: 4 }}>XP: {xp} / {level * 300}</div>
-        </div>
+    <div style={{ minHeight: '100vh', width: '100%', background: '#E9E9E9', padding: '96px 0 48px 0' }}>
+      {/* 💥 XP Progress Bar */}
+      <section style={{
+        margin: '48px auto 32px auto',
+        maxWidth: 700,
+        background: '#E9E9E9',
+        borderRadius: 24,
+        boxShadow: '0 4px 24px #5A706C',
+        padding: '2.5rem 2rem',
+        textAlign: 'center',
+        width: '90%',
+        border: '2px solid #5A706C'
+      }}>
+        <div style={{ fontWeight: 700, fontSize: 22, color: '#0F2C25', marginBottom: 8 }}>XP Progress</div>
+        <div style={{ textAlign: 'center', marginBottom: 8, fontSize: 17, color: '#A6AB9F' }}>Level {level}</div>
+        <motion.div style={{ height: 18, borderRadius: 9, background: '#E9E9E9', overflow: 'hidden', margin: '8px 0', boxShadow: '0 2px 8px #5A706C' }}>
+          <motion.div
+            initial={{ width: 0 }}
+            animate={{ width: ((xp / (level * 300)) * 100) + '%' }}
+            style={{ height: 18, background: '#D23939', borderRadius: 9 }}
+            transition={{ duration: 0.8 }}
+          />
+        </motion.div>
+        <div style={{ fontSize: 15, color: '#A6AB9F', marginTop: 4 }}>XP: {xp} / {level * 300}</div>
+      </section>
 
-        {/* 🧩 Badge Showcase */}
-        <div style={{ marginBottom: 32 }}>
-          <div style={{ fontWeight: 700, fontSize: 20, color: '#1F2937', marginBottom: 12 }}>Badges</div>
-          <div style={{ display: 'flex', flexWrap: 'wrap', gap: 18, justifyContent: 'center' }}>
-            {badgeTiers.map((t, i) => {
-              const earned = userBadgeNames.includes(t.name);
-              const isNext = nextBadge && t.name === nextBadge.name;
-              return (
-                <div key={t.name}
-                  style={{
-                    opacity: earned ? 1 : 0.4,
-                    background: isNext ? '#FEF9C3' : '#F3F4F6',
-                    border: isNext ? '2px solid #F59E42' : '2px solid #F3F4F6',
-                    borderRadius: 16,
-                    padding: 12,
-                    minWidth: 80,
-                    display: 'flex', flexDirection: 'column', alignItems: 'center',
-                    boxShadow: earned ? '0 2px 8px #22c55e33' : 'none',
-                    position: 'relative',
-                  }}
-                >
-                  <span style={{ fontSize: 36 }}>{t.emoji}</span>
-                  <span style={{ fontSize: 14, fontWeight: 600, color: '#1F2937', marginTop: 4 }}>{t.name}</span>
-                  <span style={{ fontSize: 12, color: '#6b7280', marginTop: 2 }}>{t.description}</span>
-                  {!earned && (
-                    <span style={{ fontSize: 11, color: '#F59E42', marginTop: 4 }}>Locked: Reach Level {t.level}</span>
-                  )}
-                  {isNext && <span style={{ position: 'absolute', top: 4, right: 8, fontSize: 13, color: '#F59E42', fontWeight: 700 }}>Next</span>}
-                </div>
-              );
-            })}
-          </div>
+      {/* 🧩 Badge Showcase */}
+      <section style={{
+        margin: '0 auto 32px auto',
+        maxWidth: 900,
+        background: '#E9E9E9',
+        borderRadius: 24,
+        boxShadow: '0 4px 24px #5A706C',
+        padding: '2.5rem 2rem',
+        width: '90%',
+        border: '2px solid #5A706C'
+      }}>
+        <div style={{ fontWeight: 700, fontSize: 22, color: '#0F2C25', marginBottom: 12 }}>Badges</div>
+        <div style={{ display: 'flex', flexWrap: 'wrap', gap: 18, justifyContent: 'center' }}>
+          {badgeTiers.map((t, i) => {
+            const earned = userBadgeNames.includes(t.name);
+            const isNext = nextBadge && t.name === nextBadge.name;
+            return (
+              <div key={t.name}
+                style={{
+                  opacity: earned ? 1 : 0.4,
+                  background: isNext ? '#0F2C25' : '#E9E9E9',
+                  border: isNext ? '2px solid #D23939' : '2px solid #5A706C',
+                  borderRadius: 16,
+                  padding: 12,
+                  minWidth: 80,
+                  display: 'flex', flexDirection: 'column', alignItems: 'center',
+                  boxShadow: earned ? '0 2px 8px #5A706C' : 'none',
+                  position: 'relative',
+                }}
+              >
+                <span style={{ fontSize: 36, color: '#D23939' }}>{t.emoji}</span>
+                <span style={{ fontSize: 14, fontWeight: 600, color: '#0F2C25', marginTop: 4 }}>{t.name}</span>
+                <span style={{ fontSize: 12, color: '#A6AB9F', marginTop: 2 }}>{t.description}</span>
+                {!earned && (
+                  <span style={{ fontSize: 11, color: '#D23939', marginTop: 4 }}>Locked: Reach Level {t.level}</span>
+                )}
+                {isNext && <span style={{ position: 'absolute', top: 4, right: 8, fontSize: 13, color: '#D23939', fontWeight: 700 }}>Next</span>}
+              </div>
+            );
+          })}
         </div>
+      </section>
 
-        {/* 🔥 Streak Counter */}
-
-        {/* 🎮 Level Card */}
-        <div style={{ marginBottom: 32, background: '#F3F4F6', borderRadius: 16, padding: 18, display: 'flex', gap: 32, justifyContent: 'center', alignItems: 'center', flexWrap: 'wrap' }}>
-          <div style={{ textAlign: 'center' }}>
-            <div style={{ fontWeight: 700, color: '#60A5FA', fontSize: 16 }}>Longest Streak</div>
-            <div style={{ fontSize: 22, fontWeight: 800, color: '#60A5FA' }}>{longestStreak}</div>
-          </div>
-          <div style={{ textAlign: 'center' }}>
-            <div style={{ fontWeight: 700, color: '#22C55E', fontSize: 16 }}>Level</div>
-            <div style={{ fontSize: 22, fontWeight: 800 }}>{level}</div>
-          </div>
-          <div style={{ textAlign: 'center' }}>
-            <div style={{ fontWeight: 700, color: '#F59E42', fontSize: 16 }}>Habits Completed</div>
-            <div style={{ fontSize: 22, fontWeight: 800 }}>{habitsCompleted}</div>
-          </div>
+      {/* 🎮 Level Card */}
+      <section style={{
+        margin: '0 auto 32px auto',
+        maxWidth: 900,
+        background: '#0F2C25',
+        borderRadius: 24,
+        boxShadow: '0 4px 24px #5A706C',
+        padding: '2.5rem 2rem',
+        width: '90%',
+        display: 'flex', gap: 32, justifyContent: 'center', alignItems: 'center', flexWrap: 'wrap',
+        border: '2px solid #5A706C'
+      }}>
+        <div style={{ textAlign: 'center' }}>
+          <div style={{ fontWeight: 700, color: '#A6AB9F', fontSize: 16 }}>Longest Streak</div>
+          <div style={{ fontSize: 22, fontWeight: 800, color: '#E9E9E9' }}>{longestStreak}</div>
         </div>
-
-        {/* 🏅 Rewards Timeline */}
-        <div style={{ marginBottom: 32 }}>
-          <div style={{ fontWeight: 700, fontSize: 20, color: '#1F2937', marginBottom: 12 }}>Rewards Timeline</div>
-          {rewardsTimeline.length === 0 ? (
-            <div style={{ color: '#6b7280', fontSize: 15, textAlign: 'center' }}>No milestones yet. Start building your streaks and leveling up!</div>
-          ) : (
-            <ul style={{ fontSize: 15, color: '#374151', paddingLeft: 18 }}>
-              {rewardsTimeline.map((item, idx) => (
-                <li key={idx}>{item}</li>
-              ))}
-            </ul>
-          )}
-          <div style={{ fontSize: 13, color: '#60A5FA', marginTop: 10, textAlign: 'center', cursor: 'pointer', textDecoration: 'underline' }}
-            onClick={() => window.location.href = '/habit-tracking'}>
-            Go to Habit Tracking to build your next streak →
-          </div>
+        <div style={{ textAlign: 'center' }}>
+          <div style={{ fontWeight: 700, color: '#A6AB9F', fontSize: 16 }}>Level</div>
+          <div style={{ fontSize: 22, fontWeight: 800, color: '#E9E9E9', textShadow: '0 1px 4px #5A706C' }}>{level}</div>
         </div>
-
-        {/* Recent Achievement */}
-        <div style={{ marginBottom: 24, background: '#ECFEF4', borderRadius: 12, padding: 14, textAlign: 'center', boxShadow: '0 2px 8px #22c55e22' }}>
-          <div style={{ fontWeight: 700, color: '#22C55E', fontSize: 15 }}>Recent Achievement</div>
-          <div style={{ fontSize: 16, marginTop: 4 }}>{recentAchievement}</div>
+        <div style={{ textAlign: 'center' }}>
+          <div style={{ fontWeight: 700, color: '#A6AB9F', fontSize: 16 }}>Habits Completed</div>
+          <div style={{ fontSize: 22, fontWeight: 800, color: '#E9E9E9' }}>{habitsCompleted}</div>
         </div>
+      </section>
 
-        {/* Motivation */}
-        <div style={{ marginBottom: 16, background: '#FEF9C3', borderRadius: 12, padding: 14, textAlign: 'center', boxShadow: '0 2px 8px #f59e4222' }}>
-          <div style={{ fontWeight: 700, color: '#F59E42', fontSize: 15 }}>Motivation</div>
-          <div style={{ fontSize: 16, marginTop: 4 }}>{motivationalMsg}</div>
+      {/* 🏅 Rewards Timeline */}
+      <section style={{
+        margin: '0 auto 32px auto',
+        maxWidth: 900,
+        background: '#E9E9E9',
+        borderRadius: 24,
+        boxShadow: '0 4px 24px #5A706C',
+        padding: '2.5rem 2rem',
+        width: '90%',
+        border: '2px solid #5A706C'
+      }}>
+        <div style={{ fontWeight: 700, fontSize: 22, color: '#0F2C25', marginBottom: 12 }}>Rewards Timeline</div>
+        {rewardsTimeline.length === 0 ? (
+          <div style={{ color: '#A6AB9F', fontSize: 15, textAlign: 'center' }}>No milestones yet. Start building your streaks and leveling up!</div>
+        ) : (
+          <ul style={{ fontSize: 15, color: '#0F2C25', paddingLeft: 18 }}>
+            {rewardsTimeline.map((item, idx) => (
+              <li key={idx}>{item}</li>
+            ))}
+          </ul>
+        )}
+        <div style={{ fontSize: 13, color: '#D23939', marginTop: 10, textAlign: 'center', cursor: 'pointer', textDecoration: 'underline' }}
+          onClick={() => window.location.href = '/habit-tracking'}>
+          Go to Habit Tracking to build your next streak →
         </div>
+      </section>
 
-        {/* Call to Action */}
-        <div style={{ fontSize: 13, color: '#6b7280', marginTop: 12, textAlign: 'center' }}>
-          Log your habits daily to earn XP, level up, and unlock new badges!
-        </div>
+      {/* Recent Achievement */}
+      <section style={{
+        margin: '0 auto 24px auto',
+        maxWidth: 700,
+        background: '#E9E9E9',
+        borderRadius: 16,
+        padding: 18,
+        textAlign: 'center',
+        boxShadow: '0 2px 8px #5A706C',
+        border: '2px solid #5A706C'
+      }}>
+        <div style={{ fontWeight: 700, color: '#0F2C25', fontSize: 15 }}>Recent Achievement</div>
+        <div style={{ fontSize: 16, marginTop: 4, color: '#A6AB9F' }}>{recentAchievement}</div>
+      </section>
+
+      {/* Motivation */}
+      <section style={{
+        margin: '0 auto 16px auto',
+        maxWidth: 700,
+        background: '#0F2C25',
+        borderRadius: 16,
+        padding: 18,
+        textAlign: 'center',
+        boxShadow: '0 2px 8px #5A706C',
+        border: '2px solid #5A706C'
+      }}>
+        <div style={{ fontWeight: 700, color: '#E9E9E9', fontSize: 15 }}>Motivation</div>
+        <div style={{ fontSize: 16, marginTop: 4, color: '#A6AB9F' }}>{motivationalMsg}</div>
+      </section>
+
+      {/* Call to Action */}
+      <div style={{ fontSize: 13, color: '#A6AB9F', margin: '24px auto 0 auto', textAlign: 'center', maxWidth: 700 }}>
+        Log your habits daily to earn XP, level up, and unlock new badges!
       </div>
     </div>
   );

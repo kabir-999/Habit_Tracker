@@ -9,4 +9,4 @@ const ProfileSchema = new mongoose.Schema({
   profession: String,
   goal: String
 });
-module.exports = mongoose.model('Profile', ProfileSchema, 'profile'); 
+module.exports = mongoose.model('Profile', ProfileSchema, 'test.profile'); 

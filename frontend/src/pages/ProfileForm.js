@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import axios from "axios";
+import api from "../api";
 import styles from "./ProfileForm.module.css";
 
 const ProfileForm = () => {
@@ -16,8 +16,7 @@ const ProfileForm = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const token = localStorage.getItem("token");
-      await axios.post("/api/profile", form, { headers: { Authorization: `Bearer ${token}` } });
+      await api.post("/profile", form);
       navigate("/home");
     } catch (err) {
       setError(err.response?.data?.msg || "Profile save failed");

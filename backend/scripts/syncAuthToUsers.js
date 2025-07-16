@@ -1,35 +1,35 @@
 require('dotenv').config({ path: require('path').resolve(__dirname, '../.env') });
+
+if (!process.env.MONGO_URI) {
+  console.error('❌ MONGO_URI is not defined. Here are all env vars:', process.env);
+  process.exit(1);
+}
+console.log('MONGO_URI:', process.env.MONGO_URI); // Debug: print the loaded URI
+
 const mongoose = require('mongoose');
 const Auth = require('../models/Auth');
 const User = require('../models/User');
 
-async function syncAuthToUsers() {
-  await mongoose.connect(process.env.MONGO_URI, {
-    useNewUrlParser: true,
-    useUnifiedTopology: true
-  });
+async function syncUsers() {
+  await mongoose.connect(process.env.MONGO_URI);
+
   const authUsers = await Auth.find();
+  let created = 0;
+
   for (const authUser of authUsers) {
     const exists = await User.findById(authUser._id);
     if (!exists) {
       await User.create({
         _id: authUser._id,
-        name: authUser.email.split('@')[0],
         email: authUser.email,
-        xp: 0,
-        level: 1,
-        badges: []
+        name: authUser.email.split('@')[0] // Use email prefix as name
       });
-      console.log(`Created user for auth: ${authUser.email}`);
-    } else {
-      console.log(`User already exists for auth: ${authUser.email}`);
+      created++;
     }
   }
-  await mongoose.disconnect();
-  console.log('Sync complete.');
+
+  console.log(`Synced! Created ${created} missing User documents.`);
+  process.exit(0);
 }
 
-syncAuthToUsers().catch(err => {
-  console.error(err);
-  process.exit(1);
-}); 
+syncUsers(); 

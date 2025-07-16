@@ -1,51 +1,86 @@
-import React, { useState } from 'react';
+import React, { useState, useRef } from 'react';
+import { motion, AnimatePresence } from 'framer-motion';
+import styles from './Chatbot.module.css';
 
-const AIChatbot = () => {
+const AIChatbot = ({ userId }) => {
   const [messages, setMessages] = useState([
     { from: 'ai', text: 'Hi! I am your AI Coach. How can I help you with your habits today?' }
   ]);
   const [input, setInput] = useState('');
+  const [loading, setLoading] = useState(false);
+  const [collapsed, setCollapsed] = useState(false);
+  const threadRef = useRef(null);
 
-  const sendMessage = (e) => {
+  const sendMessage = async (e) => {
     e.preventDefault();
     if (!input.trim()) return;
     setMessages([...messages, { from: 'user', text: input }]);
+    setLoading(true);
     setInput('');
-    // Here you would call the Gemini API and append the AI response
+    // Call backend
+    try {
+      const res = await fetch('/api/ai/chat', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ userId, message: input })
+      });
+      const data = await res.json();
+      setMessages(msgs => [...msgs, { from: 'ai', text: data.reply }]);
+    } catch {
+      setMessages(msgs => [...msgs, { from: 'ai', text: 'Sorry, something went wrong.' }]);
+    }
+    setLoading(false);
     setTimeout(() => {
-      setMessages(msgs => [...msgs, { from: 'ai', text: 'This is a sample AI response. (Integrate Gemini API here)' }]);
-    }, 1000);
+      if (threadRef.current) threadRef.current.scrollTop = threadRef.current.scrollHeight;
+    }, 100);
   };
 
   return (
-    <div style={{ maxWidth: 500, margin: '2rem auto', background: '#fff', borderRadius: 16, boxShadow: '0 2px 16px #7F5AF033', padding: 24 }}>
-      <h2 style={{ color: '#7F5AF0', marginBottom: 16 }}>AI Coach</h2>
-      <div style={{ minHeight: 200, maxHeight: 300, overflowY: 'auto', marginBottom: 16, background: '#F7F7FF', borderRadius: 8, padding: 12 }}>
-        {messages.map((msg, i) => (
-          <div key={i} style={{ textAlign: msg.from === 'user' ? 'right' : 'left', margin: '8px 0' }}>
-            <span style={{
-              display: 'inline-block',
-              background: msg.from === 'user' ? '#7F5AF0' : '#2CB67D',
-              color: '#fff',
-              borderRadius: 16,
-              padding: '8px 16px',
-              maxWidth: '80%',
-              fontSize: 15
-            }}>{msg.text}</span>
-          </div>
-        ))}
-      </div>
-      <form onSubmit={sendMessage} style={{ display: 'flex', gap: 8 }}>
-        <input
-          value={input}
-          onChange={e => setInput(e.target.value)}
-          placeholder="Type your message..."
-          style={{ flex: 1, padding: 10, borderRadius: 8, border: '1px solid #ddd' }}
-        />
-        <button type="submit" style={{ background: '#FF8906', color: '#fff', border: 'none', borderRadius: 8, padding: '0 18px', fontWeight: 'bold', fontSize: 16 }}>
-          Send
-        </button>
-      </form>
+    <div className={styles.chatbotContainer + (collapsed ? ' ' + styles.collapsed : '')}>
+      <AnimatePresence>
+        {!collapsed && (
+          <motion.div
+            className={styles.body}
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: 20 }}
+            transition={{ duration: 0.3 }}
+          >
+            <div className={styles.thread} ref={threadRef}>
+              {messages.map((msg, i) => (
+                <motion.div
+                  key={i}
+                  className={msg.from === 'user' ? styles.userMsg : styles.botMsg}
+                  initial={{ opacity: 0, x: msg.from === 'user' ? 40 : -40 }}
+                  animate={{ opacity: 1, x: 0 }}
+                  transition={{ duration: 0.3, delay: i * 0.05 }}
+                >
+                  {msg.text}
+                </motion.div>
+              ))}
+              {loading && (
+                <motion.div className={styles.botMsg} initial={{ opacity: 0 }} animate={{ opacity: 1 }}>
+                  <span className={styles.typing}>
+                    <span>.</span><span>.</span><span>.</span>
+                  </span>
+                </motion.div>
+              )}
+            </div>
+            <form onSubmit={sendMessage} className={styles.inputRow} autoComplete="off">
+              <input
+                value={input}
+                onChange={e => setInput(e.target.value)}
+                placeholder="Type your message..."
+                className={styles.input}
+                disabled={loading}
+              />
+              <button type="submit" className={styles.sendBtn} disabled={loading || !input.trim()}>
+                Send
+              </button>
+            </form>
+          </motion.div>
+        )}
+      </AnimatePresence>
     </div>
   );
 };
