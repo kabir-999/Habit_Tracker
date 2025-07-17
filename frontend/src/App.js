@@ -12,6 +12,7 @@ import PersonalDetails from "./pages/PersonalDetails";
 import Navbar from "./components/Navbar";
 import ProtectedRoute from "./components/ProtectedRoute";
 import FutureDiary from './pages/FutureDiary';
+import AIChatbot from './pages/AIChatbot';
 
 function ScrollToTop() {
   const { pathname } = useLocation();
@@ -37,27 +38,12 @@ function ProfilePage() {
   );
 }
 
-function App() {
-  const [isLoggedIn, setIsLoggedIn] = useState(!!localStorage.getItem("token"));
-
-  useEffect(() => {
-    setIsLoggedIn(!!localStorage.getItem("token"));
-  }, []);
-
-  const handleLogout = () => {
-    localStorage.removeItem("token");
-    setIsLoggedIn(false);
-    window.location.href = "/";
-  };
-
-  const handleSignupClick = () => {
-    window.location.href = "/login";
-  };
-
+function AppRoutes({ isLoggedIn, setIsLoggedIn, handleLogout, handleSignupClick }) {
+  const location = useLocation();
+  const hideNavbar = location.pathname === '/ai-chatbot';
   return (
-    <Router>
-      <ScrollToTop />
-      <Navbar isLoggedIn={isLoggedIn} onLogout={handleLogout} onSignupClick={handleSignupClick} />
+    <>
+      {!hideNavbar && <Navbar isLoggedIn={isLoggedIn} onLogout={handleLogout} onSignupClick={handleSignupClick} />}
       <Routes>
         <Route path="/" element={<Home isLoggedIn={isLoggedIn} />} />
         <Route path="/login" element={
@@ -79,7 +65,38 @@ function App() {
         <Route path="/ai-suggestions" element={<ProtectedRoute isLoggedIn={isLoggedIn}><AiSuggestions /></ProtectedRoute>} />
         <Route path="/personal-details" element={<ProtectedRoute isLoggedIn={isLoggedIn}><PersonalDetails onLogout={handleLogout} /></ProtectedRoute>} />
         <Route path="/future-diary" element={<FutureDiary />} />
+        <Route path="/ai-chatbot" element={<AIChatbot userId={localStorage.getItem('userId')} />} />
       </Routes>
+    </>
+  );
+}
+
+function App() {
+  const [isLoggedIn, setIsLoggedIn] = useState(!!localStorage.getItem("token"));
+
+  useEffect(() => {
+    setIsLoggedIn(!!localStorage.getItem("token"));
+  }, []);
+
+  const handleLogout = () => {
+    localStorage.removeItem("token");
+    setIsLoggedIn(false);
+    window.location.href = "/";
+  };
+
+  const handleSignupClick = () => {
+    window.location.href = "/login";
+  };
+
+  return (
+    <Router>
+      <ScrollToTop />
+      <AppRoutes
+        isLoggedIn={isLoggedIn}
+        setIsLoggedIn={setIsLoggedIn}
+        handleLogout={handleLogout}
+        handleSignupClick={handleSignupClick}
+      />
     </Router>
   );
 }
