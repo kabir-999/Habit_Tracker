@@ -1,8 +1,7 @@
 import axios from 'axios';
 
-const isProd = process.env.NODE_ENV === 'production';
 const api = axios.create({
-  baseURL: isProd ? 'https://habitwise.onrender.com/api' : '/api'
+  baseURL: process.env.REACT_APP_API_URL || '/api'
 });
 
 api.interceptors.request.use(config => {
