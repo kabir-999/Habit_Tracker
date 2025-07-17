@@ -26,14 +26,6 @@ const AiIcon = (
     <rect x="17" y="23" width="4" height="2" rx="1" fill="#60A5FA"/>
   </svg>
 );
-const SpinIcon = (
-  <svg width="38" height="38" viewBox="0 0 38 38" fill="none" xmlns="http://www.w3.org/2000/svg">
-    <circle cx="19" cy="19" r="18" stroke="#D23939" strokeWidth="3" fill="#E9E9E9"/>
-    <path d="M19 5 L22 14 L19 12 L16 14 Z" fill="#D23939"/>
-    <circle cx="19" cy="19" r="6" fill="#A6AB9F"/>
-    <text x="19" y="23" textAnchor="middle" fontSize="13" fontWeight="bold" fill="#0F2C25">🎡</text>
-  </svg>
-);
 const FutureDiaryIcon = (
   <svg width="38" height="38" viewBox="0 0 38 38" fill="none" xmlns="http://www.w3.org/2000/svg">
     <rect x="6" y="8" width="26" height="22" rx="4" fill="#A78BFA"/>

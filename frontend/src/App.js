@@ -11,7 +11,6 @@ import AiSuggestions from "./pages/AiSuggestions";
 import PersonalDetails from "./pages/PersonalDetails";
 import Navbar from "./components/Navbar";
 import ProtectedRoute from "./components/ProtectedRoute";
-import SpinWheel from './pages/SpinWheel';
 import FutureDiary from './pages/FutureDiary';
 
 function ScrollToTop() {
@@ -61,7 +60,6 @@ function App() {
       <Navbar isLoggedIn={isLoggedIn} onLogout={handleLogout} onSignupClick={handleSignupClick} />
       <Routes>
         <Route path="/" element={<Home isLoggedIn={isLoggedIn} />} />
-        <Route path="/spin" element={<ProtectedRoute isLoggedIn={isLoggedIn}><SpinWheel /></ProtectedRoute>} />
         <Route path="/login" element={
           isLoggedIn ? <Navigate to="/home" /> : <Login onLogin={() => setIsLoggedIn(true)} />
         } />

@@ -14,13 +14,13 @@ export default api;
 
 // Future Diary API
 export async function getFutureDiaryTasks(userId) {
-  const res = await fetch(`/api/future-diary?userId=${userId}`);
+  const res = await fetch(`/api/futureDiary?userId=${userId}`);
   if (!res.ok) throw new Error('Failed to fetch future diary tasks');
   return res.json();
 }
 
 export async function addFutureDiaryTask(userId, task) {
-  const res = await fetch('/api/future-diary', {
+  const res = await fetch('/api/futureDiary', {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({ ...task, userId }),
@@ -30,26 +30,26 @@ export async function addFutureDiaryTask(userId, task) {
 }
 
 export async function deleteFutureDiaryTask(id) {
-  const res = await fetch(`/api/future-diary/${id}`, { method: 'DELETE' });
+  const res = await fetch(`/api/futureDiary/${id}`, { method: 'DELETE' });
   if (!res.ok) throw new Error('Failed to delete future diary task');
   return res.json();
 }
 
 // Notifications API
 export async function getNotifications(userId) {
-  const res = await fetch(`/api/future-diary/notifications?userId=${userId}`);
+  const res = await fetch(`/api/futureDiary/notifications?userId=${userId}`);
   if (!res.ok) throw new Error('Failed to fetch notifications');
   return res.json(); // Now returns all notifications, including read status
 }
 
 export async function checkDueDiaryTasks() {
-  const res = await fetch('/api/future-diary/check-due', { method: 'POST' });
+  const res = await fetch('/api/futureDiary/check-due', { method: 'POST' });
   if (!res.ok) throw new Error('Failed to check due diary tasks');
   return res.json();
 }
 
 export async function markNotificationsRead(userId) {
-  const res = await fetch('/api/future-diary/notifications/read', {
+  const res = await fetch('/api/futureDiary/notifications/read', {
     method: 'PATCH',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({ userId })
