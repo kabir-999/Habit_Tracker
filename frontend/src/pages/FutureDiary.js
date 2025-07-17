@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { getFutureDiaryTasks, addFutureDiaryTask, deleteFutureDiaryTask } from '../api';
+import { getFutureDiaryTasks, addFutureDiaryTask } from '../api';
 
 const userId = localStorage.getItem('userId'); // Use real userId from localStorage
 
@@ -37,14 +37,8 @@ const FutureDiary = () => {
     }
   };
 
-  const handleDelete = async (id) => {
-    try {
-      await deleteFutureDiaryTask(id);
-      setTasks(tasks.filter(t => t._id !== id));
-    } catch (err) {
-      setError(err.message);
-    }
-  };
+  // Deletion of future diary tasks is not supported by the backend API.
+  // You may want to implement this in the backend if needed.
 
   return (
     <div style={{ maxWidth: 600, margin: '40px auto', padding: 24, background: '#fff', borderRadius: 16, boxShadow: '0 2px 16px #0001' }}>
@@ -90,7 +84,6 @@ const FutureDiary = () => {
               <div style={{ fontWeight: 'bold' }}>{task.title}</div>
               <div style={{ color: '#666', fontSize: 14 }}>{task.description}</div>
               <div style={{ color: '#A78BFA', fontSize: 13 }}>Due: {task.dueDate ? task.dueDate.slice(0,10) : ''}</div>
-              <button onClick={() => handleDelete(task._id)} style={{ marginTop: 8, background: '#F87171', color: '#fff', border: 'none', borderRadius: 4, padding: '4px 10px', cursor: 'pointer' }}>Delete</button>
             </li>
           ))}
         </ul>

@@ -23,7 +23,7 @@ const Gamification = () => {
   const fetchData = async () => {
     setLoading(true);
     try {
-      const res = await api.get('/api/gamification');
+      const res = await api.get('/gamification');
       setData(res.data);
     } catch {
       setError('Failed to load gamification data');

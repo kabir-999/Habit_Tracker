@@ -15,7 +15,7 @@ router.post('/signup', async (req, res) => {
     const hash = await bcrypt.hash(password, 10);
     const user = await Auth.create({ email, password: hash });
     // Also create a User document for gamification/XP
-    await User.create({ _id: user._id, email });
+    await User.create({ _id: user._id, email, name: email }); // <-- add name here
     const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET, { expiresIn: '7d' });
     res.json({ token, userId: user._id });
   } catch (err) {

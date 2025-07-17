@@ -1,6 +1,7 @@
 import React, { useState, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import styles from './Chatbot.module.css';
+import api from '../api';
 
 const AIChatbot = ({ userId }) => {
   const [messages, setMessages] = useState([
@@ -19,13 +20,8 @@ const AIChatbot = ({ userId }) => {
     setInput('');
     // Call backend
     try {
-      const res = await fetch('/api/ai/chat', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ userId, message: input })
-      });
-      const data = await res.json();
-      setMessages(msgs => [...msgs, { from: 'ai', text: data.reply }]);
+      const res = await api.post('/ai/chat', { userId, message: input });
+      setMessages(msgs => [...msgs, { from: 'ai', text: res.data.reply }]);
     } catch {
       setMessages(msgs => [...msgs, { from: 'ai', text: 'Sorry, something went wrong.' }]);
     }

@@ -8,7 +8,7 @@ const AllProfiles = () => {
   useEffect(() => {
     const fetchProfiles = async () => {
       try {
-        const res = await api.get('/api/profile/all');
+        const res = await api.get('/profile/all');
         setProfiles(res.data.profiles);
       } catch (err) {
         setError('Failed to load profiles.');
