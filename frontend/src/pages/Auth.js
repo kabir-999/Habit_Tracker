@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import axios from "axios";
+import api from "../api";
 import { motion } from "framer-motion";
 
 const Auth = () => {
@@ -36,7 +36,7 @@ const Auth = () => {
     }
     try {
       if (isLogin) {
-        const res = await axios.post("/api/auth/login", { email: form.email, password: form.password });
+        const res = await api.post("/auth/login", { email: form.email, password: form.password });
         localStorage.setItem("token", res.data.token);
         // Store userId for habit tracking
         if (res.data.userId) {
@@ -46,7 +46,7 @@ const Auth = () => {
         }
         navigate("/home");
       } else {
-        const res = await axios.post("/api/auth/signup", { email: form.email, password: form.password });
+        const res = await api.post("/auth/signup", { email: form.email, password: form.password });
         localStorage.setItem("token", res.data.token);
         // Store userId for habit tracking
         if (res.data.userId) {
