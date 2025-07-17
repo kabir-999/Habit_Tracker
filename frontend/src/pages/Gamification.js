@@ -10,6 +10,14 @@ const Gamification = () => {
 
   useEffect(() => {
     fetchData();
+    // Listen for XP awarded event (from SpinWheel or others)
+    const handleXpAwarded = () => {
+      fetchData();
+    };
+    window.addEventListener('xp-awarded', handleXpAwarded);
+    return () => {
+      window.removeEventListener('xp-awarded', handleXpAwarded);
+    };
   }, []);
 
   const fetchData = async () => {

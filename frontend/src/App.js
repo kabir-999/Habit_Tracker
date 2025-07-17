@@ -11,6 +11,8 @@ import AiSuggestions from "./pages/AiSuggestions";
 import PersonalDetails from "./pages/PersonalDetails";
 import Navbar from "./components/Navbar";
 import ProtectedRoute from "./components/ProtectedRoute";
+import SpinWheel from './pages/SpinWheel';
+import FutureDiary from './pages/FutureDiary';
 
 function ScrollToTop() {
   const { pathname } = useLocation();
@@ -59,6 +61,7 @@ function App() {
       <Navbar isLoggedIn={isLoggedIn} onLogout={handleLogout} onSignupClick={handleSignupClick} />
       <Routes>
         <Route path="/" element={<Home isLoggedIn={isLoggedIn} />} />
+        <Route path="/spin" element={<ProtectedRoute isLoggedIn={isLoggedIn}><SpinWheel /></ProtectedRoute>} />
         <Route path="/login" element={
           isLoggedIn ? <Navigate to="/home" /> : <Login onLogin={() => setIsLoggedIn(true)} />
         } />
@@ -77,6 +80,7 @@ function App() {
         <Route path="/analytics" element={<ProtectedRoute isLoggedIn={isLoggedIn}><Analytics /></ProtectedRoute>} />
         <Route path="/ai-suggestions" element={<ProtectedRoute isLoggedIn={isLoggedIn}><AiSuggestions /></ProtectedRoute>} />
         <Route path="/personal-details" element={<ProtectedRoute isLoggedIn={isLoggedIn}><PersonalDetails onLogout={handleLogout} /></ProtectedRoute>} />
+        <Route path="/future-diary" element={<FutureDiary />} />
       </Routes>
     </Router>
   );

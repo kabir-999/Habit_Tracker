@@ -31,6 +31,11 @@ app.use('/api/xp-history', require('./routes/xpHistory'));
 app.use('/api/gamification', require('./routes/gamification'));
 app.use('/api/habit-emoji-logs', require('./routes/habitEmojiLogs'));
 app.use('/api/ai', require('./routes/ai'));
+app.use('/api/spin-wheel', require('./routes/spinWheel'));
+// Register spin task log endpoints
+app.use('/api/spin-task', require('./routes/spinTask'));
+const futureDiaryRoutes = require('./routes/futureDiary');
+app.use('/api/future-diary', futureDiaryRoutes);
 
 const PORT = process.env.PORT || 5000;
-app.listen(PORT, () => console.log(`Server running on port ${PORT}`)); 
+app.listen(PORT, () => console.log(`Server running on port ${PORT}`));

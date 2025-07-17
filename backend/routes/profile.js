@@ -22,12 +22,20 @@ function authMiddleware(req, res, next) {
 router.post('/', authMiddleware, async (req, res) => {
   try {
     const { name, age, height, weight, gender, profession, goal } = req.body;
+    // Check if name already exists
+    const existing = await Profile.findOne({ name });
+    if (existing) {
+      return res.status(400).json({ msg: 'Username already taken. Please choose a different one.' });
+    }
     const profile = await Profile.create({
       userId: req.userId,
       name, age, height, weight, gender, profession, goal
     });
     res.json({ profile });
   } catch (err) {
+    if (err.code === 11000 && err.keyPattern && err.keyPattern.name) {
+      return res.status(400).json({ msg: 'Username already taken. Please choose a different one.' });
+    }
     res.status(500).json({ msg: 'Server error' });
   }
 });

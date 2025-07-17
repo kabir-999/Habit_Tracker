@@ -42,6 +42,9 @@ router.post('/', auth, async (req, res) => {
     const user = await User.findById(userId);
     if (user) {
       user.xp = (user.xp || 0) + 10;
+      // Push notification for +10 XP
+      user.notifications = user.notifications || [];
+      user.notifications.push({ message: 'You gained +10 XP for logging a habit emoji!' });
       console.log(`Awarded 10 XP to user ${user.email || user._id} for emoji on habit ${habitId} at ${date}`);
       // Level up logic
       while (user.xp >= user.level * 300) {

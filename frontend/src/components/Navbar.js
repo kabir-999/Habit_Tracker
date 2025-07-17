@@ -1,9 +1,11 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import ProfileForm from "../pages/ProfileForm";
+import { getNotifications, checkDueDiaryTasks, markNotificationsRead } from '../api';
 
 const Navbar = ({ isLoggedIn, onLogout, onSignupClick }) => {
   const navigate = useNavigate();
+  // Removed notification state and logic
 
   return (
     <nav style={{
@@ -11,7 +13,7 @@ const Navbar = ({ isLoggedIn, onLogout, onSignupClick }) => {
       display: "flex", alignItems: "center", justifyContent: "space-between", padding: "1rem 2rem"
     }}>
       <div style={{ fontWeight: 800, fontSize: 24, color: "#E9E9E9", cursor: 'pointer', background: 'none', borderRadius: 12, padding: '0.2em 0.7em' }} onClick={() => window.location.href = '/'}>HabitWise</div>
-      <div style={{ display: "flex", gap: 24 }}>
+      <div style={{ display: "flex", gap: 24, alignItems: 'center' }}>
         {isLoggedIn ? (
           <button
             onClick={() => navigate('/personal-details')}

@@ -1,0 +1,23 @@
+.logged-in-message {
+  font-size: 1.45rem;
+  color: #22c55e;
+  background: #f0fdf4;
+  border-radius: 18px;
+  padding: 1.2rem 2rem;
+  margin: 0 auto 24px auto;
+  max-width: 520px;
+  text-align: center;
+  font-weight: 700;
+  box-shadow: 0 2px 16px #4ade8033;
+  transition: opacity 0.4s cubic-bezier(.4,2,.6,1), transform 0.4s cubic-bezier(.4,2,.6,1);
+  opacity: 1;
+  transform: translateY(0);
+}
+.fade-in {
+  opacity: 1;
+  transform: translateY(0);
+}
+.fade-out {
+  opacity: 0;
+  transform: translateY(30px);
+}

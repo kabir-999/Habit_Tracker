@@ -35,6 +35,9 @@ router.post('/', auth, async (req, res) => {
     if (user) {
       // Award XP
       user.xp = (user.xp || 0) + 10;
+      // Push notification for +10 XP
+      user.notifications = user.notifications || [];
+      user.notifications.push({ message: 'You gained +10 XP for completing a habit!' });
       // Level up logic
       let leveledUp = false;
       while (user.xp >= user.level * 300) {
