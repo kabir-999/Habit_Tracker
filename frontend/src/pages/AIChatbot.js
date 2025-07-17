@@ -12,16 +12,38 @@ const AIChatbot = ({ userId }) => {
   const [collapsed, setCollapsed] = useState(false);
   const threadRef = useRef(null);
 
+  // Helper to fetch user profile
+  const fetchUserProfile = async () => {
+    try {
+      const res = await api.get('/profile');
+      return res.data.profile;
+    } catch {
+      return null;
+    }
+  };
+
   const sendMessage = async (e) => {
     e.preventDefault();
     if (!input.trim()) return;
     setMessages([...messages, { from: 'user', text: input }]);
     setLoading(true);
     setInput('');
-    // Call backend
     try {
-      const res = await api.post('/ai/chat', { userId, message: input });
-      setMessages(msgs => [...msgs, { from: 'ai', text: res.data.reply }]);
+      // Fetch user profile
+      const profile = await fetchUserProfile();
+      if (!profile) {
+        setMessages(msgs => [...msgs, { from: 'ai', text: 'Sorry, could not load your profile.' }]);
+        setLoading(false);
+        return;
+      }
+      // Call Vercel AI endpoint
+      const res = await fetch('/api/ai', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ message: input, profile })
+      });
+      const data = await res.json();
+      setMessages(msgs => [...msgs, { from: 'ai', text: data.reply }]);
     } catch {
       setMessages(msgs => [...msgs, { from: 'ai', text: 'Sorry, something went wrong.' }]);
     }

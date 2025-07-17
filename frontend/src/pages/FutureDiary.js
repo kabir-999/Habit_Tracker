@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { getFutureDiaryTasks, addFutureDiaryTask } from '../api';
+import { getFutureDiaryTasks, addFutureDiaryTask, deleteFutureDiaryTask } from '../api';
 
 const userId = localStorage.getItem('userId'); // Use real userId from localStorage
 
@@ -21,9 +21,21 @@ const FutureDiary = () => {
     setForm({ ...form, [e.target.name]: e.target.value });
   };
 
+  const isFutureDate = (dateStr) => {
+    const today = new Date();
+    today.setHours(0,0,0,0);
+    const inputDate = new Date(dateStr);
+    inputDate.setHours(0,0,0,0);
+    return inputDate > today;
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (!form.title || !form.date) return;
+    if (!isFutureDate(form.date)) {
+      setError('Please select a future date (not today or past).');
+      return;
+    }
     try {
       const newTask = await addFutureDiaryTask(userId, {
         title: form.title,
@@ -32,13 +44,20 @@ const FutureDiary = () => {
       });
       setTasks([...tasks, newTask]);
       setForm({ title: '', description: '', date: '' });
+      setError(null);
     } catch (err) {
       setError(err.message);
     }
   };
 
-  // Deletion of future diary tasks is not supported by the backend API.
-  // You may want to implement this in the backend if needed.
+  const handleDelete = async (id) => {
+    try {
+      await deleteFutureDiaryTask(id);
+      setTasks(tasks.filter(task => task._id !== id));
+    } catch (err) {
+      setError('Failed to delete task.');
+    }
+  };
 
   return (
     <div style={{ maxWidth: 600, margin: '40px auto', padding: 24, background: '#fff', borderRadius: 16, boxShadow: '0 2px 16px #0001' }}>
@@ -80,10 +99,11 @@ const FutureDiary = () => {
         <ul style={{ listStyle: 'none', padding: 0 }}>
           {tasks.length === 0 && <li>No future tasks yet.</li>}
           {tasks.map(task => (
-            <li key={task._id} style={{ marginBottom: 18, padding: 12, border: '1px solid #eee', borderRadius: 8 }}>
+            <li key={task._id} style={{ marginBottom: 18, padding: 12, border: '1px solid #eee', borderRadius: 8, position: 'relative' }}>
               <div style={{ fontWeight: 'bold' }}>{task.title}</div>
               <div style={{ color: '#666', fontSize: 14 }}>{task.description}</div>
               <div style={{ color: '#A78BFA', fontSize: 13 }}>Due: {task.dueDate ? task.dueDate.slice(0,10) : ''}</div>
+              <button onClick={() => handleDelete(task._id)} style={{ position: 'absolute', top: 10, right: 10, background: '#D23939', color: '#fff', border: 'none', borderRadius: 6, padding: '4px 10px', cursor: 'pointer' }}>Delete</button>
             </li>
           ))}
         </ul>
